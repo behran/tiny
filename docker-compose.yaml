@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - .:/rust/src/app
+    entrypoint: "tail -f /dev/null"
+    ports:
+      - "8091:80"
+    env_file:
+      - .env
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
