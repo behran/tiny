@@ -13,5 +13,11 @@
 ### Запусе cargo-watch c clippy
 
 ```shell
-cargo-watch -qc -x run -x clippy
+  cargo-watch -qc -x run -x clippy
+```
+
+
+## API 
+```shell
+
 ```
