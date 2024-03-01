@@ -1711,6 +1711,7 @@ dependencies = [
  "envy",
  "futures",
  "mongodb",
+ "rand",
  "serde",
 ]
 

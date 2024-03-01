@@ -33,6 +33,7 @@ impl MongoRepo {
         let doc = Link {
             id: None,
             link: data.link,
+            hash: data.hash,
         };
         let link = self
             .col

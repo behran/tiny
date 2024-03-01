@@ -4,6 +4,7 @@ use actix_web::web::{Json, Path};
 use bson::oid::ObjectId;
 use crate::models::link::Link;
 use crate::repository::mongodb_link::MongoRepo;
+use crate::tools::use_full;
 
 #[get("")]
 async fn list(
@@ -22,11 +23,11 @@ async fn create_link(
     payload: Json<Link>,
 ) -> impl Responder {
     let data = Link {
-        id: None,
         link: payload.link.to_owned(),
+        hash: Some(use_full::generate(6)),
+        ..Default::default()
     };
     let result = link_repository.create_link(data).await;
-
     match result {
         Ok(link) => HttpResponse::Ok().json(link),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
@@ -83,6 +84,7 @@ async fn update_link(
     let link = Link {
         id: Some(ObjectId::parse_str(&id).unwrap()),
         link: payload.link.to_owned(),
+        hash: None,
     };
 
     let result = link_repository.update_link(id, link).await;

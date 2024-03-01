@@ -2,6 +2,7 @@ mod config;
 mod repository;
 mod handlers;
 mod models;
+mod tools;
 
 use dotenv::dotenv;
 
@@ -9,7 +10,7 @@ use std::sync::Arc;
 use actix_web::{web::Data, App, HttpServer, Responder, web};
 
 use config::{Config};
-use crate::handlers::links;
+use crate::handlers::{links, rewrite};
 use crate::repository::mongodb_link::MongoRepo;
 
 
@@ -26,8 +27,10 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(
                 web::scope("/short-links")
-                    .configure(links::config)
-            )
+                    .configure(links::config))
+            .service(
+                web::scope("/rewrite").
+                    configure(rewrite::config))
             .app_data(db_data.clone())
     )
         .bind((config.app.hostname, config.app.port))?
