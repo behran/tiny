@@ -12,7 +12,7 @@
    docker-compose up -d
 ```
 
-### Запусе cargo-watch c clippy
+### cargo-watch with clippy
 
 ```shell
   cargo-watch -qc -x run -x clippy
