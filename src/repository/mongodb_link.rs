@@ -87,6 +87,17 @@ impl MongoRepo {
         Ok(link.unwrap())
     }
 
+    pub async fn find_link_by_hash(&self, hash: String) -> Result<Link, Error> {
+        let link = self
+            .col
+            .find_one(doc! {"hash":hash}, None)
+            .await
+            .ok()
+            .expect("Error get link detail");
+
+        Ok(link.unwrap())
+    }
+
     pub async fn get_all_links(&self) -> Result<Vec<Link>, Error> {
         let mut cursor = self
             .col
