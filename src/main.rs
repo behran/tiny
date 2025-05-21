@@ -8,6 +8,7 @@ use dotenv::dotenv;
 
 use std::sync::Arc;
 use actix_web::{web::Data, App, HttpServer, Responder, web};
+use actix_web_prom::PrometheusMetricsBuilder;
 
 use config::{Config};
 use crate::handlers::{links, rewrite};
@@ -21,10 +22,16 @@ async fn main() -> std::io::Result<()> {
 
     println!("{:?}", config);
 
+    let prometheus = PrometheusMetricsBuilder::new("api")
+        .endpoint("/metrics")
+        .build()
+        .unwrap();
+
     let mongodb = MongoRepo::new(config.clone()).await;
     let db_data = Data::new(Arc::new(mongodb));
     HttpServer::new(move ||
         App::new()
+            .wrap(prometheus.clone())
             .service(
                 web::scope("/short-links")
                     .configure(links::config))
